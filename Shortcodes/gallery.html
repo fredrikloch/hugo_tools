@@ -1,0 +1,41 @@
+<!-- Static files required for photoswipe -->
+<!-- Core CSS file -->
+<link rel="stylesheet" href="{{ $.Page.Site.BaseURL }}css/photoswipe.css">
+
+<!-- Skin CSS file (styling of UI - buttons, caption, etc.)
+     In the folder of skin CSS file there are also:
+     - .png and .svg icons sprite,
+     - preloader.gif (for browsers that do not support CSS animations) -->
+<link rel="stylesheet" href="{{ $.Page.Site.BaseURL }}css/default-skin/default-skin.css">
+<!-- Core JS file -->
+<script src="{{ $.Page.Site.BaseURL }}js/photoswipe.min.js"></script>
+<!-- UI JS file -->
+<script src="{{ $.Page.Site.BaseURL }}js/photoswipe-ui-default.min.js"></script>
+<link rel="stylesheet" href="{{ $.Page.Site.BaseURL }}css/gallery.css">
+
+{{ with .Get "url" }}
+    {{ $url := . }}
+    {{ $data := getJSON $url }}
+    <div class="demo-gallery">
+    {{ range $index, $dataset := $data.data }}
+        <a href="{{ $.Page.Site.BaseURL }}Gallery/{{ index $dataset.originalImage "src" }}"
+            data-size="{{ index $dataset.originalImage "size" }}"  data-med="{{ $.Page.Site.BaseURL }}Gallery/{{ index $dataset.mediumImage "src" }}"
+            data-med-size="{{ index $dataset.mediumImage "size" }}"  data-author=""
+            {{ if eq $index 0 }} class="demo-gallery__img--main"{{ end }}>
+            {{ if lt $index 5 }}
+            <img src="{{ $.Page.Site.BaseURL }}Gallery/{{ index $dataset "msrc" }}" alt="" ></img>
+            {{ end }}<div style="display: none;"></div>{{ if isset $dataset "title" }}<figure>{{ index $dataset "label" }}</figure>{{ end }}
+        </a>
+    {{ end }}
+    </div>
+{{ end }}
+
+
+
+<!-- The html required for the gallery to work -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true"><!-- Background of PhotoSwipe. It's a separate element as animating opacity is faster than rgba(). --> <div class="pswp__bg"></div><div class="pswp__scroll-wrap"><!-- Container that holds slides. PhotoSwipe keeps only 3 of them in the DOM to save memory. Don't modify these 3 pswp__item elements, data is added later on. --> <div class="pswp__container"> <div class="pswp__item"></div><div class="pswp__item"></div><div class="pswp__item"></div></div><div class="pswp__ui pswp__ui--hidden"> <div class="pswp__top-bar"> <div class="pswp__counter"></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button> <button class="pswp__button pswp__button--share" title="Share"></button> <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button> <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button> <div class="pswp__preloader"> <div class="pswp__preloader__icn"> <div class="pswp__preloader__cut"> <div class="pswp__preloader__donut"></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"> <div class="pswp__share-tooltip"></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"> </button> <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"> </button> <div class="pswp__caption"> <div class="pswp__caption__center"></div></div></div></div></div>
+
+
+<script type="text/javascript">
+!function(){var e=function(e){for(var t=function(e){for(var e,t,n,i,r=e.childNodes,a=r.length,o=[],l=0;a>l;l++)if(e=r[l],1===e.nodeType){t=e.children,n=e.getAttribute("data-size").split("x"),i={src:e.getAttribute("href"),w:parseInt(n[0],10),h:parseInt(n[1],10),author:e.getAttribute("data-author")},i.el=e,t.length>0&&(i.msrc=t[0].getAttribute("src"),t.length>1&&(i.title=t[1].innerHTML));var d=e.getAttribute("data-med");d&&(n=e.getAttribute("data-med-size").split("x"),i.m={src:d,w:parseInt(n[0],10),h:parseInt(n[1],10)}),i.o={src:i.src,w:i.w,h:i.h},o.push(i)}return o},n=function s(e,t){return e&&(t(e)?e:s(e.parentNode,t))},i=function(e){e=e||window.event,e.preventDefault?e.preventDefault():e.returnValue=!1;var t=e.target||e.srcElement,i=n(t,function(e){return"A"===e.tagName});if(i){for(var r,o=i.parentNode,l=i.parentNode.childNodes,d=l.length,u=0,s=0;d>s;s++)if(1===l[s].nodeType){if(l[s]===i){r=u;break}u++}return r>=0&&a(r,o),!1}},r=function(){var e=window.location.hash.substring(1),t={};if(e.length<5)return t;for(var n=e.split("&"),i=0;i<n.length;i++)if(n[i]){var r=n[i].split("=");r.length<2||(t[r[0]]=r[1])}return t.gid&&(t.gid=parseInt(t.gid,10)),t},a=function(e,n,i,r){var a,o,l,d=document.querySelectorAll(".pswp")[0];if(l=t(n),o={galleryUID:n.getAttribute("data-pswp-uid"),getThumbBoundsFn:function(e){var t=l[e].el.children[0],n=window.pageYOffset||document.documentElement.scrollTop,i=t.getBoundingClientRect();return{x:i.left,y:i.top+n,w:i.width}},addCaptionHTMLFn:function(e,t,n){return e.title?(t.children[0].innerHTML=e.title+"<br/><small>Photo: "+e.author+"</small>",!0):(t.children[0].innerText="",!1)}},r)if(o.galleryPIDs){for(var u=0;u<l.length;u++)if(l[u].pid==e){o.index=u;break}}else o.index=parseInt(e,10)-1;else o.index=parseInt(e,10);if(!isNaN(o.index)){i&&(o.showAnimationDuration=0),a=new PhotoSwipe(d,PhotoSwipeUI_Default,l,o);var s,c,h=!1,f=!0;a.listen("beforeResize",function(){var e=window.devicePixelRatio?window.devicePixelRatio:1;e=Math.min(e,2.5),s=a.viewportSize.x*e,s>=1200||!a.likelyTouchDevice&&s>800||screen.width>1200?h||(h=!0,c=!0):h&&(h=!1,c=!0),c&&!f&&a.invalidateCurrItems(),f&&(f=!1),c=!1}),a.listen("gettingData",function(e,t){h?(t.src=t.o.src,t.w=t.o.w,t.h=t.o.h):(t.src=t.m.src,t.w=t.m.w,t.h=t.m.h)}),a.init()}},o=document.querySelectorAll(e),l=0,d=o.length;d>l;l++)o[l].setAttribute("data-pswp-uid",l+1),o[l].onclick=i;var u=r();u.pid&&u.gid&&a(u.pid,o[u.gid-1],!0,!0)};e(".demo-gallery")}();
+</script>
